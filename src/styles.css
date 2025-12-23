@@ -23,8 +23,11 @@ main > h1 {
 li {
   margin-bottom: 10px;
 }
-
+.container-float {
+  overflow: auto; /* Clears the float */
+}
 .box {
+  float: left;
   position: relative;
   margin: auto;
   display: block;
@@ -36,6 +39,7 @@ li {
   border: ;
 }
 .rules {
+  float: left;
   position: relative;
   text-align: center;
   font-size: 1.2em;
