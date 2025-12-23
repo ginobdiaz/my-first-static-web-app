@@ -29,16 +29,19 @@ li {
   margin: auto;
   display: block;
   margin-top: 8%;
-  width: 640px;
-  height: 820px;
+  width: 600px;
+  height: 420px;
   background: none;
   background: linear-gradient(to bottom, #33ccff 0%, #ffffff 100%);
   border: ;
 }
 .rules {
+  position: relative;
   text-align: center;
   font-size: 1.2em;
   margin-top: 10%;
+  width: 600px;
+  height: 200px;
 }
 
 .body {
