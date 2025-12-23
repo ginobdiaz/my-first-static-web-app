@@ -23,6 +23,9 @@ main > h1 {
 li {
   margin-bottom: 10px;
 }
+ul > li {
+  margin-bottom: none;
+}
 .container-float {
   overflow: auto; /* Clears the float */
 }
@@ -46,6 +49,10 @@ li {
   width: 600px;
   height: 200px;
   background: linear-gradient(to bottom, #caf2ff 0%, #ffffff 100%);
+}
+rules > h1 {
+  text-align: center;
+  font-size: 2.5em;
 }
 .Grinch {
   float: left;
