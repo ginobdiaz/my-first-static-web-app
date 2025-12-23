@@ -35,6 +35,11 @@ li {
   background: linear-gradient(to bottom, #33ccff 0%, #ffffff 100%);
   border: ;
 }
+.rules {
+  text-align: center;
+  font-size: 1.2em;
+  margin-top: 10%;
+}
 
 .body {
   background: ;
