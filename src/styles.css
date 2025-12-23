@@ -42,10 +42,11 @@ li {
   float: left;
   position: relative;
   text-align: center;
-  font-size: 1.2em;
+  font-size: 1.0em;
   margin-top: 10%;
   width: 600px;
   height: 200px;
+  background: linear-gradient(to bottom, #caf2ff 0%, #ffffff 100%);
 }
 
 .body {
