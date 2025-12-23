@@ -6,7 +6,7 @@ html, body {
   margin: 0;
   border: 0;
   padding: 0;
-  background-color: #ddf4fc;
+  background-color: #f1f1f1;
 }
 
 main {
@@ -54,7 +54,7 @@ ul li {
   margin-top: none;
   width: 600px;
   height: 200px;
-  background: linear-gradient(to bottom, #ddf4fc 0%, #ffffff 100%);
+  background: linear-gradient(to bottom, #ddf4fc 0%, #f1f1f1 100%);
 }
 .rules > h1 {
   text-align: center;
