@@ -52,6 +52,7 @@ ul li {
   position: relative;
   font-size: 1.0em;
   margin-top: none;
+  border-right: 3px solid #cc0505;
   width: 600px;
   height: 200px;
   background: linear-gradient(to bottom, #ddf4fc 0%, #f1f1f1 100%);
@@ -67,6 +68,7 @@ ul li {
 
   position: relative;
   margin-top: 70%;
+  border-right: 3px solid #cc0505;
   width: 600px;
   height: 126px;
   font-weight: bold;
