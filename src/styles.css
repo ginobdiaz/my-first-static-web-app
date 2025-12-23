@@ -6,7 +6,7 @@ html, body {
   margin: 0;
   border: 0;
   padding: 0;
-  background-color: #333333;
+  background-color: #ddf4fc;
 }
 
 main {
@@ -20,6 +20,11 @@ main > h1 {
   font-size: 3.5em;
 }
 
+main > header {
+  text-align: center;
+  font-size: 3.5em;
+  background-color: #333333;
+}
 li {
   margin-bottom: 10px;
 }
