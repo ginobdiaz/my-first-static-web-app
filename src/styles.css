@@ -25,6 +25,10 @@ main > header {
   font-size: 3.5em;
   background-color: #333333;
 }
+ol {
+    border-right: 3px solid #cc0505;
+
+}
 li {
   margin-bottom: 10px;
 }
@@ -39,7 +43,7 @@ ul li {
   position: relative;
   margin: auto;
   display: block;
-  margin-top: 8%;
+  margin-top: -26%;
   width: 600px;
   height: 620px;
   background: none;
