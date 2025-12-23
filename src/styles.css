@@ -6,7 +6,7 @@ html, body {
   margin: 0;
   border: 0;
   padding: 0;
-  background-color: #fff;
+  background-color: #333333;
 }
 
 main {
@@ -54,6 +54,9 @@ ul li {
 .rules > h1 {
   text-align: center;
   font-size: 2.5em;
+}
+.rules > p{
+  margin-left: 8px;
 }
 .Grinch {
 
