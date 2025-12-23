@@ -62,7 +62,7 @@ ul li {
   height: 60px;
   font-weight: bold;
   font-size: 0.75em;
-  background-image: url('\img\token02.jpg');
+  background-image: url('token02.jpg');
   background-repeat: repeat-x;
   background: linear-gradient(to bottom, #f7f3f3 0%, #ffffff 100%);
 }
