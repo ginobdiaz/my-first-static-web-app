@@ -57,6 +57,10 @@ rules > h1 {
 .Grinch {
   float: left;
   position: relative;
+  margin-top: 10%;
+  width: 600px;
+  font-weight: bold;
+  font-size: 1.5em;
 }
 .body {
   background: ;
