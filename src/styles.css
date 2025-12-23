@@ -24,7 +24,7 @@ li {
   margin-bottom: 10px;
 }
 ul li {
-  margin-bottom: none;
+  margin: none;
 }
 .container-float {
   overflow: auto; /* Clears the float */
