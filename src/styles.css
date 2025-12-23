@@ -57,9 +57,9 @@ ul > li {
 .Grinch {
 
   position: relative;
-  margin: auto;
+  margin-top: 70%;
   width: 600px;
-  height: 200px;
+  height: 80px;
   font-weight: bold;
   font-size: 0.75em;
   border: 3px solid #73AD21;
