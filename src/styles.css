@@ -39,7 +39,7 @@ ul > li {
   height: 420px;
   background: none;
   background: linear-gradient(to bottom, #33ccff 0%, #ffffff 100%);
-  border: ;
+  border: 3px solid #cc0505;
 }
 .rules {
   float: left;
@@ -55,14 +55,14 @@ ul > li {
   font-size: 2.5em;
 }
 .Grinch {
-  float: left;
+
   position: relative;
   margin-top: 10%;
   width: 600px;
   height: 200px;
   font-weight: bold;
   font-size: 1.5em;
-  border-color: #000
+  border: 3px solid #73AD21;
 }
 .body {
   background: ;
