@@ -38,7 +38,7 @@ ul li {
   width: 600px;
   height: 620px;
   background: none;
-  background: linear-gradient(to bottom, #33ccff 0%, #caf2ff 100%);
+  background: linear-gradient(to bottom, #33ccff 0%, #ddf4fc 100%);
   border: 3px solid #cc0505;
 }
 .rules {
@@ -48,7 +48,7 @@ ul li {
   margin-top: none;
   width: 600px;
   height: 200px;
-  background: linear-gradient(to bottom, #caf2ff 0%, #f7f3f3 100%);
+  background: linear-gradient(to bottom, #ddf4fc 0%, #ffffff 100%);
 }
 .rules > h1 {
   text-align: center;
@@ -64,7 +64,7 @@ ul li {
   font-size: 0.75em;
   background-image: url('token02.jpg');
   background-repeat: repeat-x;
-  background: linear-gradient(to bottom, #f7f3f3 0%, #ffffff 100%);
+  
 }
 
 .body {
