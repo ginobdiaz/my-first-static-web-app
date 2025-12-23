@@ -39,7 +39,8 @@ ul li {
   height: 620px;
   background: none;
   background: linear-gradient(to bottom, #33ccff 0%, #ddf4fc 100%);
-  border: 3px solid #cc0505;
+  border-top: 3px solid #08530f;
+  border-right: 3px solid #cc0505;
 }
 .rules {
   float: left;
@@ -59,7 +60,7 @@ ul li {
   position: relative;
   margin-top: 70%;
   width: 600px;
-  height: 60px;
+  height: 120px;
   font-weight: bold;
   font-size: 0.75em;
   background-image: url('token02.jpg');
