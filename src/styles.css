@@ -48,7 +48,10 @@ li {
   height: 200px;
   background: linear-gradient(to bottom, #caf2ff 0%, #ffffff 100%);
 }
-
+.Grinch {
+  float: left;
+  position: relative;
+}
 .body {
   background: ;
   height: 100%;
