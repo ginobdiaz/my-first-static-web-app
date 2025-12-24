@@ -27,6 +27,7 @@ main > header {
 }
 ol {
   margin-top: 20px;
+  margin-right: -5px;
     border-right: 3px solid #cc0505;
 
 }
