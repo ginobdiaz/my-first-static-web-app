@@ -120,10 +120,16 @@
 
 </div>
 
-   <br/><br/><br/>
+   <br/><p>Loading content from the API: <b id="name">...</b></p><br/><br/>
   <footer>
     <p>© 2025 GinoDiaz.Net</p>
   </footer>
+  <script>
+      (async function() {
+        const { text } = await( await fetch(`/api/message`)).json();
+        document.querySelector('#name').textContent = text;
+    }());
+  </script>
 </body>
 
 </html>
