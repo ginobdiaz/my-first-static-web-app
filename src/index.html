@@ -136,8 +136,18 @@
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }
-          const data = await response.json();
-          document.querySelector('#name').textContent = data.text || 'no text';
+          // Check if the response is JSON or plain text
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            console.log('Received JSON:', data);
+            document.querySelector('#name').textContent = data.text || 'no text';
+          } else {
+            const text = await response.text();
+            console.log('Received text:', text);
+            document.querySelector('#name').textContent = text || 'no text';
+          }
+
         } catch (err) {
           console.error('failed to load message:', err);
           document.querySelector('#name').textContent = 'error loading';
