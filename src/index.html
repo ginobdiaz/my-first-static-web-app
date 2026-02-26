@@ -120,14 +120,19 @@
 
 </div>
 
-   <br/><p>Loading content from the API: <b id="name">...</b></p><br/><br/>
+   <br/>
+<p>
+  Loading content from the API: <b id="name">...</b>
+  <button id="refresh">Refresh</button>
+</p>
+<br/><br/>
   <footer>
     <p>© 2025 GinoDiaz.Net</p>
   </footer>
   <script>
-      (async function() {
+      async function loadMessage() {
         try {
-          const response = await fetch(`https://ginodiaz.net//api/message`);
+          const response = await fetch(`/api/message`);
           if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
           }
@@ -137,7 +142,11 @@
           console.error('failed to load message:', err);
           document.querySelector('#name').textContent = 'error loading';
         }
-      })();
+      }
+
+      document.getElementById('refresh').addEventListener('click', loadMessage);
+      // load once on start
+      loadMessage();
   </script>
 
 </html>
