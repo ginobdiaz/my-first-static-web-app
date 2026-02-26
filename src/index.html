@@ -126,10 +126,18 @@
   </footer>
   <script>
       (async function() {
-        const { text } = await( await fetch(`/api/message`)).json();
-        document.querySelector('#name').textContent = text;
-    }());
+        try {
+          const response = await fetch(`/api/message`);
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          const data = await response.json();
+          document.querySelector('#name').textContent = data.text || 'no text';
+        } catch (err) {
+          console.error('failed to load message:', err);
+          document.querySelector('#name').textContent = 'error loading';
+        }
+      })();
   </script>
-</body>
 
 </html>
