@@ -40,397 +40,228 @@ ul li {
 .container-float {
   overflow: auto; /* Clears the float */
 }
-.box {
-  float: left;
-  position: relative;
-  margin: auto;
-  display: block;
-  margin-top: 6%;
-  width: 600px;
-  height: 720px;
-  background: none;
-  background: linear-gradient(to bottom, #33ccff 0%, #ddf4fc 100%);
-  border-top: 3px solid #08530f;
-  border-right: 3px solid #cc0505;
-}
-.rules {
-  float: left;
-  position: relative;
-  font-size: 1.0em;
-  margin-top: none;
-  border-right: 3px solid #cc0505;
-  width: 600px;
-  height: 200px;
-  background: linear-gradient(to bottom, #ddf4fc 0%, #f1f1f1 100%);
-}
-.rules > h1 {
-  text-align: center;
-  font-size: 2.5em;
-}
-.rules > p{
-  margin-left: 8px;
-}
-.Grinch {
-
-  position: relative;
-  margin-top: 70%;
-  border-right: 3px solid #cc0505;
-  width: 600px;
-  height: 126px;
-  font-weight: bold;
-  font-size: 0.75em;
-  background-image: url('token02.jpg');
-  background-repeat: repeat-x;
-  
-}
 
 .body {
   background: ;
   height: 100%;
 }
 
-.head {
-  background-color: black;
-  width: 270px;
-  height: 300px;
-  top: 16.5%;
-  left: 35%;
-  display: inline-block;
-  position: absolute;
-  border-radius: 60% 55% 30% 30%;
+/*
+Source - https://stackoverflow.com/a/76993225
+Posted by scrhartley
+Retrieved 2026-03-06, License - CC BY-SA 4.0
+*/
+
+* {margin: 0; padding: 0;}
+
+.tree ul {
+    padding-top: 20px; position: relative;
+
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
 }
 
-.santa-hat {
-background-color: #e60519;
-  display: inline-block;
-  position: absolute;
-  z-index: 1;
-  width: 250px;
-  height: 120px;
-  border-radius: 10% 60% 30% 30%;
-  top: -18%;
-  left: 5%;
+.tree li {
+    float: left; text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 20px 5px 0 5px;
+
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
 }
 
-.santa {
-  display: inline-block;
-  position: absolute;
-  top: -19%;
-  left: -10%;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-  box-shadow: 5px 5px 40px #696969;
+/*We will use ::before and ::after to draw the connectors*/
+
+.tree li::before, .tree li::after{
+    content: '';
+    position: absolute; top: 0; right: 50%;
+    border-top: 1px solid #ccc;
+    width: 50%; height: 20px;
 }
 
-.santa-ball1{
-  display: inline-block;
-  position: absolute;
-  top: 5%;
-  left: -6%;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-  box-shadow: 5px 5px 30px #696969;
+/*We need to remove left-right connectors from elements without 
+any siblings*/
+.tree li:only-child::after, .tree li:only-child::before {
+    display: none;
 }
 
-.santa-ball2 {
-  display: inline-block;
-  position: absolute;
-  top: 5%;
-  left: 15%;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-   box-shadow: 5px 5px 30px #696969;
+/*Remove space from the top of single children*/
+.tree li:only-child{ padding-top: 0;}
+
+
+/*Time to add downward connectors from parents*/
+.tree ul ul::before{
+    content: '';
+    position: absolute; top: 0;
+    border-left: 1px solid #ccc;
+    width: 0; height: 20px;
 }
 
-.santa-ball3{
-  display: inline-block;
-  position: absolute;
-  top: 5%;
-  left: 36%;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-   box-shadow: 5px 5px 30px #696969;
+.tree li a{
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #666;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    display: inline-block;
+
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
 }
 
-.santa-ball4{
-  display: inline-block;
-  position: absolute;
-  top: 5%;
-  left: 58%;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-   box-shadow: 5px 5px 30px #696969;
+/*Time for some hover effects*/
+/*We will apply the hover effect the the lineage of the element also*/
+.tree li a:hover, .tree li a:hover+ul li a {
+    background: #c8e4f8; color: #000; border: 1px solid #94a0b4;
+}
+/*Connector styles on hover*/
+.tree li a:hover+ul li::after, 
+.tree li a:hover+ul li::before, 
+.tree li a:hover+ul::before, 
+.tree li a:hover+ul ul::before{
+    border-color:  #94a0b4;
 }
 
-.santa-ball5{
-  display: inline-block;
-  position: absolute;
-  top: 5%;
-  left: 80%;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background-color: white;
-  z-index: 2;
-   box-shadow: 5px 5px 30px #696969;
+.tree ul ul ul ul li a {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px 10px;
+    text-decoration: none;
+    color: #666;
+    font-family: arial, verdana, tahoma;
+    font-size: 11px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    text-orientation: mixed !important;
+    white-space: nowrap; /* Prevent text from wrapping */
+    
+    writing-mode: vertical-rl; /* Vertical orientation */
 }
 
-.head2 {
-  background-color: white;
-  width: 230px;
-  height: 260px;
-  top: 9%;
-  left: 8%;
-  display: inline-block;
-  position: absolute;
-  border-radius: 55% 55% 30% 30%;
+
+
+.tree li::after{
+    right: auto; left: 50%;
+    border-left: 1px solid #ccc;
+}
+.tree ul ul ul::before {
+    content: '';
+    position: absolute; left: 50%; bottom: -20px;
+    border-left: 1px solid #ccc;
+    height: 20px;
+}
+/*Remove left connector from first child and 
+  right connector from last child*/
+.tree li:first-child::before, .tree li:last-child::after{
+    border: 0 none;
+}
+/*Adding back the vertical connector to the last nodes*/
+.tree li:last-child::before{
+    border-right: 1px solid #ccc;
+    border-radius: 0 5px 0 0;
+    -webkit-border-radius: 0 5px 0 0;
+    -moz-border-radius: 0 5px 0 0;
+}
+.tree li:first-child::after{
+    border-radius: 5px 0 0 0;
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
 }
 
-.arm-left {
-  width: 50px;
-  height: 100px;
-  background-color: #000;
-  position: absolute;
-  top: 45%;
-  right: 95%;
-  animation-name: arms;
-  animation-duration: 4s;
-  border-radius: 1990% 100% 1700% 100%;
-  -webkit-animation: action 1s infinite alternate;
-  animation: action 1s infinite alternate;
-}
 
-.arm-right {
-  width: 50px;
-  height: 100px;
-  background-color: #000;
-  position: absolute;
-  top: 43%;
-  left: 93%;
-  border-radius: 100% 1990% 100% 1700%;
-  animation-name: arms;
-  animation-duration: 4s;
-  -webkit-animation: action 1s infinite alternate;
-  animation: action 1s infinite alternate;
-}
+@media (max-width: 600px) {
+    .tree ul ul ul ul li a {
+        writing-mode: horizontal-tb;
+    }
 
-.blush {
-  width: 30px;
-  height: 20px;
-  background-color: #ffc0cb;
-  border-radius: 50%;
-  position: absolute;
-  top: -3%;
-  left: 188%;
-  z-index: 3;
-}
+    .tree ul ul ul {
+        padding-top : 0;
+    }
 
-.blush2 {
-  width: 30px;
-  height: 20px;
-  background-color: #ffc0cb;
-  border-radius: 50%;
-  position: absolute;
-  top: 1%;
-  left: -135%;
-  z-index: 3;
-}
+    .tree > ul > li > ul > li > ul > li {
+        padding: 0 0 0 20px;
+        display: flex;
+        align-items: center;
+        clear: left;
+        position: relative;
+        left: 50%;
+    }
+    .tree > ul > li > ul > li > ul > li::before {
+        height: 100%;
+    }
+    .tree > ul > li > ul > li > ul > li:last-child::before {
+        height: 50%;
+    }
 
-.eye-left {
-  position: absolute;
-  background: black;
-  width: 10%;
-  height: 10%;
-  top: 35%;
-  left: 31%;
-  border-radius: 50%;
-  z-index: 3;
-}
+    .tree > ul > li > ul > li > ul > li > a {
+        writing-mode: vertical-rl;
+    }
 
-.eye-right {
-  position: absolute;
-  background: black;
-  width: 10%;
-  height: 10%;
-  top: 35%;
-  right: 31%;
-  border-radius: 50%;
-  z-index: 3;
-}
 
-.pupil {
-  position: absolute;
-  width: 38%;
-  height: 35%;
-  top: 35%;
-  left: 20%;
-  border-radius: 50%;
-  background: white;
-}
+    .tree ul ul ul li::before {
+        width: 20px;
+        left: 0;
+        border-left: 1px solid #ccc !important;
+        border-top: none;
+    }
+    .tree ul ul ul li:last-child::before {
+        border-bottom: 1px solid #ccc;
+        border-right: none;
+        border-radius: 0 0 0 5px;
+        -webkit-border-radius: 0 0 0 5px;
+        -moz-border-radius: 0 0 0 5px;
+    }
+    .tree ul ul ul li::after {
+        width: 20px;
+        top: 50%;
+        left: 0;
+        border-left: 1px solid #ccc;
+        
+        border-radius: 0 !important;
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+    }
 
-.nose {
-  width: 55px;
-  height: 30px;
-  background-color: #feb236;
-  border-radius: 90% 90% 80% 90%;
-  position: absolute;
-  top: 45%;
-  left: 40%;
-  z-index: 1;
-}
+    .tree ul ul ul ul {
+        display: inline-block;
+        padding: 0 0 0 20px;
+    }
 
-@-webkit-keyframes action {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
-}
-@keyframes action {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
-}
+    .tree ul ul ul ul::before {
+        border-left: none;
+        border-top: 1px solid #ccc;
+        width: 20px;
+        left: 0;
+        top: 50%;
+    }
 
-.snowflake {
-  color: #fff;
-  font-size: 1em;
-  font-family: Arial, sans-serif;
-  text-shadow: 0 0 5px #000;
-}
+    .tree ul ul ul ul li {
+        float: none;
+        padding: 5px 0 5px 20px;
+    }
 
-@-webkit-keyframes snowflakes-fall {
-  0% {
-    top: -10%;
-  }
-  100% {
-    top: 100%;
-  }
-}
-@-webkit-keyframes snowflakes-shake {
-  0%,
-  100% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
-  }
-  50% {
-    -webkit-transform: translateX(80px);
-    transform: translateX(80px);
-  }
-}
-@keyframes snowflakes-fall {
-  0% {
-    top: -10%;
-  }
-  100% {
-    top: 100%;
-  }
-}
-@keyframes snowflakes-shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(80px);
-  }
-}
-.snowflake {
-  position: fixed;
-  top: -10%;
-  z-index: 9999;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  cursor: default;
-  -webkit-animation-name: snowflakes-fall, snowflakes-shake;
-  -webkit-animation-duration: 10s, 3s;
-  -webkit-animation-timing-function: linear, ease-in-out;
-  -webkit-animation-iteration-count: infinite, infinite;
-  -webkit-animation-play-state: running, running;
-  animation-name: snowflakes-fall, snowflakes-shake;
-  animation-duration: 10s, 3s;
-  animation-timing-function: linear, ease-in-out;
-  animation-iteration-count: infinite, infinite;
-  animation-play-state: running, running;
-}
-.snowflake:nth-of-type(0) {
-  left: 1%;
-  -webkit-animation-delay: 0s, 0s;
-  animation-delay: 0s, 0s;
-}
-.snowflake:nth-of-type(1) {
-  left: 10%;
-  -webkit-animation-delay: 1s, 1s;
-  animation-delay: 1s, 1s;
-}
-.snowflake:nth-of-type(2) {
-  left: 20%;
-  -webkit-animation-delay: 6s, 0.5s;
-  animation-delay: 6s, 0.5s;
-}
-.snowflake:nth-of-type(3) {
-  left: 30%;
-  -webkit-animation-delay: 4s, 2s;
-  animation-delay: 4s, 2s;
-}
-.snowflake:nth-of-type(4) {
-  left: 40%;
-  -webkit-animation-delay: 2s, 2s;
-  animation-delay: 2s, 2s;
-}
-.snowflake:nth-of-type(5) {
-  left: 50%;
-  -webkit-animation-delay: 8s, 3s;
-  animation-delay: 8s, 3s;
-}
-.snowflake:nth-of-type(6) {
-  left: 60%;
-  -webkit-animation-delay: 6s, 2s;
-  animation-delay: 6s, 2s;
-}
-.snowflake:nth-of-type(7) {
-  left: 70%;
-  -webkit-animation-delay: 2.5s, 1s;
-  animation-delay: 2.5s, 1s;
-}
-.snowflake:nth-of-type(8) {
-  left: 80%;
-  -webkit-animation-delay: 1s, 0s;
-  animation-delay: 1s, 0s;
-}
-.snowflake:nth-of-type(9) {
-  left: 90%;
-  -webkit-animation-delay: 3s, 1.5s;
-  animation-delay: 3s, 1.5s;
-}
-.snowflake:nth-of-type(10) {
-  left: 25%;
-  -webkit-animation-delay: 2s, 0s;
-  animation-delay: 2s, 0s;
-}
-.snowflake:nth-of-type(11) {
-  left: 65%;
-  -webkit-animation-delay: 4s, 2.5s;
-  animation-delay: 4s, 2.5s;
+    .tree ul ul ul ul li:first-child::before,
+    .tree ul ul ul li:last-child::after {
+        border: 0 none !important;
+    }
+    .tree ul ul ul ul li:first-child::after{
+        border-radius: 5px 0 0 0 !important;
+        -webkit-border-radius: 5px 0 0 0 !important;
+        -moz-border-radius: 5px 0 0 0 !important;
+    }
 }
