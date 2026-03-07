@@ -47,8 +47,8 @@ ul li {
 }
 
 /*
-Source - https://stackoverflow.com/a/76993225
-Posted by scrhartley
+Source - https://stackoverflow.com/a/76979798
+Posted by scrhartley, modified by community. See post 'Timeline' for change history
 Retrieved 2026-03-06, License - CC BY-SA 4.0
 */
 
@@ -147,121 +147,80 @@ any siblings*/
     transition: all 0.5s;
     -webkit-transition: all 0.5s;
     -moz-transition: all 0.5s;
+    /*writing-mode: vertical-rl !important;*/ /* Vertical orientation */
     text-orientation: mixed !important;
     white-space: nowrap; /* Prevent text from wrapping */
-    
-    writing-mode: vertical-rl; /* Vertical orientation */
 }
 
 
 
-.tree li::after{
-    right: auto; left: 50%;
+.tree ul ul ul {
+    padding-top : 0;
+}
+
+.tree > ul > li > ul > li > ul > li {
+    padding: 0 0 0 20px;
+    display: flex;
+    align-items: center;
+    clear: left;
+    position: relative;
+    left: 50%;
+}
+.tree > ul > li > ul > li > ul > li::before {
+    height: 100%;
+}
+.tree > ul > li > ul > li > ul > li:last-child::before {
+    height: 50%;
+}
+
+.tree > ul > li > ul > li > ul > li > a {
+    writing-mode: vertical-rl;
+}
+
+
+.tree ul ul ul li::before {
+    width: 20px;
+    left: 0;
+    border-left: 1px solid #ccc;
+    border-top: none;
+}
+.tree ul ul ul li:last-child::before {
+    border-bottom: 1px solid #ccc;
+    border-radius: 0 0 0 5px;
+    -webkit-border-radius: 0 0 0 5px;
+    -moz-border-radius: 0 0 0 5px;
+}
+.tree ul ul ul li::after {
+    width: 20px;
+    top: 50%;
+    left: 0;
     border-left: 1px solid #ccc;
 }
-.tree ul ul ul::before {
-    content: '';
-    position: absolute; left: 50%; bottom: -20px;
-    border-left: 1px solid #ccc;
-    height: 20px;
+
+.tree ul ul ul ul {
+    display: inline-block;
+    padding: 0 0 0 20px;
 }
-/*Remove left connector from first child and 
-  right connector from last child*/
-.tree li:first-child::before, .tree li:last-child::after{
+
+.tree ul ul ul ul::before {
+    border-left: none;
+    border-top: 1px solid #ccc;
+    width: 20px;
+    left: 0;
+    top: 50%;
+}
+
+.tree ul ul ul ul li {
+    float: none;
+    padding: 5px 0 5px 20px;
+}
+
+.tree ul ul ul ul li:first-child::before,
+.tree ul ul ul li:last-child::after {
     border: 0 none;
 }
-/*Adding back the vertical connector to the last nodes*/
-.tree li:last-child::before{
-    border-right: 1px solid #ccc;
-    border-radius: 0 5px 0 0;
-    -webkit-border-radius: 0 5px 0 0;
-    -moz-border-radius: 0 5px 0 0;
-}
-.tree li:first-child::after{
+.tree ul ul ul ul li:first-child::after{
     border-radius: 5px 0 0 0;
     -webkit-border-radius: 5px 0 0 0;
     -moz-border-radius: 5px 0 0 0;
-}
-
-
-@media (max-width: 600px) {
-    .tree ul ul ul ul li a {
-        writing-mode: horizontal-tb;
-    }
-
-    .tree ul ul ul {
-        padding-top : 0;
-    }
-
-    .tree > ul > li > ul > li > ul > li {
-        padding: 0 0 0 20px;
-        display: flex;
-        align-items: center;
-        clear: left;
-        position: relative;
-        left: 50%;
-    }
-    .tree > ul > li > ul > li > ul > li::before {
-        height: 100%;
-    }
-    .tree > ul > li > ul > li > ul > li:last-child::before {
-        height: 50%;
-    }
-
-    .tree > ul > li > ul > li > ul > li > a {
-        writing-mode: vertical-rl;
-    }
-
-
-    .tree ul ul ul li::before {
-        width: 20px;
-        left: 0;
-        border-left: 1px solid #ccc !important;
-        border-top: none;
-    }
-    .tree ul ul ul li:last-child::before {
-        border-bottom: 1px solid #ccc;
-        border-right: none;
-        border-radius: 0 0 0 5px;
-        -webkit-border-radius: 0 0 0 5px;
-        -moz-border-radius: 0 0 0 5px;
-    }
-    .tree ul ul ul li::after {
-        width: 20px;
-        top: 50%;
-        left: 0;
-        border-left: 1px solid #ccc;
-        
-        border-radius: 0 !important;
-        -webkit-border-radius: 0 !important;
-        -moz-border-radius: 0 !important;
-    }
-
-    .tree ul ul ul ul {
-        display: inline-block;
-        padding: 0 0 0 20px;
-    }
-
-    .tree ul ul ul ul::before {
-        border-left: none;
-        border-top: 1px solid #ccc;
-        width: 20px;
-        left: 0;
-        top: 50%;
-    }
-
-    .tree ul ul ul ul li {
-        float: none;
-        padding: 5px 0 5px 20px;
-    }
-
-    .tree ul ul ul ul li:first-child::before,
-    .tree ul ul ul li:last-child::after {
-        border: 0 none !important;
-    }
-    .tree ul ul ul ul li:first-child::after{
-        border-radius: 5px 0 0 0 !important;
-        -webkit-border-radius: 5px 0 0 0 !important;
-        -moz-border-radius: 5px 0 0 0 !important;
-    }
 }
