@@ -45,7 +45,8 @@ ul li {
   background: ;
   height: 100%;
 }
-
+.tree { border: #cc0505 solid 3px;
+ }
 /*
 Source - https://stackoverflow.com/a/76979798
 Posted by scrhartley, modified by community. See post 'Timeline' for change history
