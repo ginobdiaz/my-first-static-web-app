@@ -46,7 +46,7 @@ ul li {
   height: 100%;
 }
 .tree { border: #cc0505 solid 3px;
-    width: fit-content;
+    width: max-content;
  }
 /*
 Source - https://stackoverflow.com/a/76979798
