@@ -5,6 +5,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
+  <style>
+            body {
+            margin: 0;
+            background: #121212;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: sans-serif;
+        }
+        canvas {
+            cursor: grab;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+        .controls {
+            position: absolute;
+            bottom: 20px;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+  </style>  
   <title>GinoDiaz.Net</title>
 </head>
 
@@ -16,112 +42,159 @@
   </main>
 
  <!--<div class="container-float"> -->
-<div class="tree">
-  <ul>
-    <li>
-      <a href="#">Parent</a>
-      <ul>
-        <li>
-          <a href="#">Child</a>
-          <ul>
-            <li><a href="#">March</a>
-              <ul>
-                <li>
-                  <a href="#">03-22</a>
-                </li>
-                <li>
-                  <a href="#">03-27</a>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <a href="#">April</a>
-              <ul>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-              </ul>
-            </li>
-            <li><a href="#">May</a>
-              <ul>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-                <li>
-                  <a href="#">Great Grand Child</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </li>
-  </ul>
-  &nbsp; 
-</div>
+    <div class="controls">Click a Number to Highlight</div>
+    <canvas id="canvas"></canvas>
+
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+const phi = (1 + Math.sqrt(5)) / 2;
+let rotX = 0, rotY = 0;
+let isDragging = false;
+let lastMouseX = 0, lastMouseY = 0;
+
+// Track which face is selected
+let selectedFace = null;
+
+// Vertices of a Dodecahedron
+const vertices = [
+    [-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],
+    [-1, -1, 1], [1, -1, 1], [1, 1, 1], [-1, 1, 1],
+    [0, -1/phi, -phi], [0, 1/phi, -phi], [0, 1/phi, phi], [0, -1/phi, phi],
+    [-1/phi, -phi, 0], [1/phi, -phi, 0], [1/phi, phi, 0], [-1/phi, phi, 0],
+    [-phi, 0, -1/phi], [phi, 0, -1/phi], [phi, 0, 1/phi], [-phi, 0, 1/phi]
+];
+
+// 12 Pentagonal Faces
+const faces = [
+    [0, 8, 9, 3, 16], [0, 12, 13, 1, 8], [0, 16, 19, 4, 12],
+    [1, 13, 5, 18, 17], [1, 17, 2, 9, 8], [2, 14, 15, 3, 9],
+    [2, 17, 18, 6, 14], [3, 15, 7, 19, 16], [4, 19, 7, 10, 11],
+    [4, 11, 5, 13, 12], [5, 11, 10, 6, 18], [6, 10, 7, 15, 14]
+];
+
+// Mouse Interaction
+canvas.addEventListener('mousedown', e => {
+    isDragging = true;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+});
+window.addEventListener('mouseup', () => isDragging = false);
+window.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    rotY += (e.clientX - lastMouseX) * 0.01;
+    rotX += (e.clientY - lastMouseY) * 0.01;
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+});
+
+// Click detection
+canvas.addEventListener("click", e => {
+    const mx = e.clientX;
+    const my = e.clientY;
+
+    // Check if click is inside any face number bounding area
+    for (let f of renderedFaces) {
+        const dx = mx - f.centerX;
+        const dy = my - f.centerY;
+        if (Math.sqrt(dx*dx + dy*dy) < 25) {  // 25px radius
+            selectedFace = f.index;
+            return;
+        }
+    }
+});
+
+function rotate([x, y, z]) {
+    let cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    let y1 = y * cosX - z * sinX;
+    let z1 = y * sinX + z * cosX;
+
+    let cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    let x2 = x * cosY + z1 * sinY;
+    let z2 = -x * sinY + z1 * cosY;
+
+    return [x2, y1, z2];
+}
+
+let renderedFaces = [];
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    renderedFaces = [];
+
+    let projectedFaces = faces.map((face, index) => {
+        let pts = face.map(idx => {
+            let rotated = rotate(vertices[idx]);
+            const scale = 300 / (rotated[2] + 6);
+            return {
+                x: rotated[0] * scale + canvas.width / 2,
+                y: rotated[1] * scale + canvas.height / 2,
+                z: rotated[2]
+            };
+        });
+
+        let v1 = { x: pts[1].x - pts[0].x, y: pts[1].y - pts[0].y };
+        let v2 = { x: pts[2].x - pts[0].x, y: pts[2].y - pts[0].y };
+        let crossProduct = v1.x * v2.y - v1.y * v2.x;
+
+        return { 
+            pts, 
+            crossProduct, 
+            avgZ: pts.reduce((s, p) => s + p.z, 0) / pts.length,
+            index
+        };
+    });
+
+    projectedFaces
+        .filter(f => f.crossProduct > 0)
+        .sort((a, b) => a.avgZ - b.avgZ)
+        .forEach(face => {
+            ctx.beginPath();
+            ctx.moveTo(face.pts[0].x, face.pts[0].y);
+            face.pts.forEach(p => ctx.lineTo(p.x, p.y));
+            ctx.closePath();
+
+            let brightness = Math.floor(100 + face.avgZ * 30);
+            ctx.fillStyle = `hsl(210, 70%, ${brightness}%)`;
+            ctx.strokeStyle = "rgba(255,255,255,0.5)";
+            ctx.lineWidth = 1;
+            ctx.fill();
+            ctx.stroke();
+
+            // Center of face
+            let cx = face.pts.reduce((s, p) => s + p.x, 0) / face.pts.length;
+            let cy = face.pts.reduce((s, p) => s + p.y, 0) / face.pts.length;
+
+            // Store for click detection
+            renderedFaces.push({
+                index: face.index,
+                centerX: cx,
+                centerY: cy
+            });
+
+            // Number color
+            ctx.fillStyle = (selectedFace === face.index) ? "yellow" : "white";
+            ctx.font = "24px sans-serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(face.index + 1, cx, cy);
+        });
+
+    requestAnimationFrame(draw);
+}
+
+draw();
+</script>
   
    <div style="border: 3px solid #f50a0a;"> HERE I'M, ROCKING LIKE A HURRICANE! </div>
 
-<!-- 
- </div>
-
-Source - https://stackoverflow.com/a/76993225
-Posted by scrhartley
-Retrieved 2026-03-06, License - CC BY-SA 4.0
--->
-
-<!--
-Source - https://stackoverflow.com/a/76979798
-Posted by scrhartley, modified by community. See post 'Timeline' for change history
-Retrieved 2026-03-06, License - CC BY-SA 4.0
--->
-
-   <br/>
-<p>
-  Loading content from the API: <b id="name">...</b>
-  <button id="refresh">Refresh</button>
-</p>
-<br/><br/>
-  <footer>
-    <p>© 2025 GinoDiaz.Net</p>
-  </footer>
-  <script>
-      async function loadMessage() {
-        try {
-          const response = await fetch(`/api/message`);
-          if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-          }
-          // Check if the response is JSON or plain text
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
-            const data = await response.json();
-            console.log('Received JSON:', data);
-            document.querySelector('#name').textContent = data.text || 'no text';
-          } else {
-            const text = await response.text();
-            console.log('Received text:', text);
-            document.querySelector('#name').textContent = text || 'no text';
-          }
-
-        } catch (err) {
-          console.error('failed to load message:', err);
-          document.querySelector('#name').textContent = 'error loading';
-        }
-      }
-
-      document.getElementById('refresh').addEventListener('click', loadMessage);
-      // load once on start
-      loadMessage();
-  </script>
-
+</body>
 </html>
