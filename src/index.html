@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -15,18 +14,30 @@
     justify-content: center;
   }
 
+  /* NEW: wrapper handles the rounded corners/shadow and,
+     if the table is ever wider than the screen, lets you
+     scroll sideways instead of losing columns */
+<!DOCTYPE html>
+  .table-wrapper {
+    width: 100%;
+    max-width: 900px;
+    margin-top: 40px;
+    overflow-x: auto;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
   .table {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    /* minmax gives each column breathing room but still lets
+       the grid shrink with the viewport instead of clipping */
+    grid-template-columns: repeat(5, minmax(110px, 1fr));
     background: #ffffff;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-    border-radius: 6px;
-    margin-top: 40px;
-    overflow: hidden;
+    min-width: 600px; /* below this width, scroll instead of squish */
   }
 
   .cell {
-    padding: 12px 24px;
+    padding: 12px 16px;
     text-align: center;
     border-bottom: 1px solid #e0e0e0;
   }
@@ -49,53 +60,71 @@
     font-weight: 600;
     color: #555;
   }
-</style>  
+
+  /* NEW: tighten things up on small screens so users are
+     less likely to need to scroll at all */
+  @media (max-width: 600px) {
+    body {
+      padding: 16px;
+    }
+    .cell {
+      padding: 10px 10px;
+      font-size: 14px;
+    }
+    .table {
+      min-width: 520px;
+    }
+  }
+</style>
 </head>
 
 <body>
   <main>
-    <header>
+    <header style="text-align:center;">
       <img src="\img\gbd01.png" width="65" height="65" alt="Mr.Gino"><font size="46" color="green">GinoDiaz</font><font size="48" color="yellow">.</font><font size="46" color="red">Net</font>
     </header>
     <div class="content" style="text-align:center; margin-top: 20px;">
       <h1>FIFA World Cup 2026 - Knockout Stage</h1>
-      <p>Players and their selected teams for the Round of 32 in the World Cup 2026.</p>   </div>
-<div class="table">
+      <p>Players and their selected teams for the Round of 32 in the World Cup 2026.</p>
+    </div>
 
-  <div class="cell header">Player</div>
-  <div class="cell header">Team 1</div>
-  <div class="cell header">Team 2</div>
-  <div class="cell header">Team 3</div>
-  <div class="cell header">Team 4</div>
+    <div class="table-wrapper">
+      <div class="table">
 
-  <div class="row" style="display:contents">
-    <div class="cell">Art S.</div><div class="cell">Colombia</div><div class="cell">Spain</div><div class="cell">Cape Verde</div><div class="cell">Ghana</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Raymond</div><div class="cell">Switzerland</div><div class="cell">Norway</div><div class="cell">Portugal</div><div class="cell">Egypt</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Gino D.</div><div class="cell">Ivory Coast</div><div class="cell">Netherlands</div><div class="cell">Paraguay</div><div class="cell">Bosnia & Herzegovina</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">George D.</div><div class="cell">Germany</div><div class="cell">USA</div><div class="cell">Congo DR</div><div class="cell">Ecuador</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Luis D.</div><div class="cell">Croatia</div><div class="cell">Argentina</div><div class="cell">Algeria</div><div class="cell">Australia</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Eddie D.</div><div class="cell">Mexico</div><div class="cell">Morocco</div><div class="cell">Sweden</div><div class="cell">Senegal</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Ray D.</div><div class="cell">France</div><div class="cell">Belgium</div><div class="cell">Japan</div><div class="cell">Canada</div>
-  </div>
-  <div class="row" style="display:contents">
-    <div class="cell">Jose M.</div><div class="cell">Brazil</div><div class="cell">England</div><div class="cell">Austria</div><div class="cell">South Africa</div>
-  </div>
+        <div class="cell header">Player</div>
+        <div class="cell header">Team 1</div>
+        <div class="cell header">Team 2</div>
+        <div class="cell header">Team 3</div>
+        <div class="cell header">Team 4</div>
 
-</div>
+        <div class="row" style="display:contents">
+          <div class="cell">Art S.</div><div class="cell">Colombia</div><div class="cell">Spain</div><div class="cell">Cape Verde</div><div class="cell">Ghana</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Raymond</div><div class="cell">Switzerland</div><div class="cell">Norway</div><div class="cell">Portugal</div><div class="cell">Egypt</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Gino D.</div><div class="cell">Ivory Coast</div><div class="cell">Netherlands</div><div class="cell">Paraguay</div><div class="cell">Bosnia & Herzegovina</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">George D.</div><div class="cell">Germany</div><div class="cell">USA</div><div class="cell">Congo DR</div><div class="cell">Ecuador</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Luis D.</div><div class="cell">Croatia</div><div class="cell">Argentina</div><div class="cell">Algeria</div><div class="cell">Australia</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Eddie D.</div><div class="cell">Mexico</div><div class="cell">Morocco</div><div class="cell">Sweden</div><div class="cell">Senegal</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Ray D.</div><div class="cell">France</div><div class="cell">Belgium</div><div class="cell">Japan</div><div class="cell">Canada</div>
+        </div>
+        <div class="row" style="display:contents">
+          <div class="cell">Jose M.</div><div class="cell">Brazil</div><div class="cell">England</div><div class="cell">Austria</div><div class="cell">South Africa</div>
+        </div>
 
+      </div>
+    </div>
+  </main>
 </body>
-  </main>    
- </body>
 </html>
+
