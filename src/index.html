@@ -16,9 +16,10 @@
     justify-content: center;
   }
 
-  /* NEW: wrapper handles the rounded corners/shadow and,
-     if the table is ever wider than the screen, lets you
-     scroll sideways instead of losing columns */
+  /* wrapper handles the rounded corners/shadow. On wide screens it
+     can still scroll sideways as a fallback, but on phones we switch
+     the table into a stacked card layout instead (see media query),
+     so scrolling is no longer needed there. */
   .table-wrapper {
     width: 100%;
     max-width: 900px;
@@ -30,11 +31,9 @@
 
   .table {
     display: grid;
-    /* minmax gives each column breathing room but still lets
-       the grid shrink with the viewport instead of clipping */
     grid-template-columns: repeat(5, minmax(110px, 1fr));
     background: #ffffff;
-    min-width: 600px; /* below this width, scroll instead of squish */
+    min-width: 600px;
   }
 
   .cell {
@@ -47,6 +46,10 @@
     background: #2c3e50;
     color: #ffffff;
     font-weight: 600;
+  }
+
+  .row {
+    display: contents;
   }
 
   .row:last-child .cell {
@@ -62,46 +65,110 @@
     color: #555;
   }
 
-  /* X overlay: two thin, semi-transparent lines crossed over the
-     cell. Text stays readable underneath since the lines are thin
-     and not fully opaque. */
-  .cell.eliminated {
+  /* X overlay: two thin, semi-transparent lines crossed over just
+     the team name text (not the whole cell), via a wrapping span.
+     That way it stays put over the value even when the cell also
+     contains a label, like on mobile. Text stays readable
+     underneath since the lines are thin and not fully opaque. */
+  .value.eliminated {
     position: relative;
+    display: inline-block;
   }
 
-  .cell.eliminated::before,
-  .cell.eliminated::after {
+  .value.eliminated::before,
+  .value.eliminated::after {
     content: "";
     position: absolute;
     top: 50%;
-    left: 8%;
-    right: 8%;
+    left: -6px;
+    right: -6px;
     height: 2px;
     background: rgba(220, 53, 69, 0.65);
     pointer-events: none;
   }
 
-  .cell.eliminated::before {
+  .value.eliminated::before {
     transform: rotate(18deg);
   }
 
-  .cell.eliminated::after {
+  .value.eliminated::after {
     transform: rotate(-18deg);
   }
 
-  /* NEW: tighten things up on small screens so users are
-     less likely to need to scroll at all */
+  /* ===== MOBILE LAYOUT =====
+     Below 600px the grid is dropped entirely in favor of a stack of
+     "player cards" — one per row — so there's nothing wider than the
+     screen and no horizontal scrolling is ever needed. */
   @media (max-width: 600px) {
     body {
       padding: 16px;
     }
-    .cell {
-      padding: 10px 10px;
+
+    .table-wrapper {
+      overflow-x: visible;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    .table {
+      display: block;
+      min-width: 0;
+      background: transparent;
+    }
+
+    /* Column headers aren't needed anymore — each value gets its
+       own inline label instead (see .row .cell::before below). */
+    .table > .cell.header {
+      display: none;
+    }
+
+    .row {
+      display: block;
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .row:nth-child(even) .cell:not(.header) {
+      background: transparent;
+    }
+
+    .row .cell {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      padding: 10px 14px;
+      border-bottom: 1px solid #eeeeee;
       font-size: 14px;
     }
-    .table {
-      min-width: 520px;
+
+    .row .cell:last-child {
+      border-bottom: none;
     }
+
+    /* Player name becomes the card's title/header */
+    .row .cell:first-child {
+      background: #2c3e50 !important;
+      color: #ffffff;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    /* Team cells get a small label ("Team 1", "Team 2"...) pulled
+       from a data attribute so it's clear what each value means
+       without needing the column headers. */
+    .row .cell[data-label]::before {
+      content: attr(data-label);
+      color: #888888;
+      font-weight: 500;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
   }
 </style>
 </head>
@@ -125,29 +192,29 @@
         <div class="cell header">Team 3</div>
         <div class="cell header">Team 4</div>
 
-        <div class="row" style="display:contents">
-          <div class="cell">Art S.</div><div class="cell">Colombia</div><div class="cell">Spain</div><div class="cell">Cape Verde</div><div class="cell">Ghana</div>
+        <div class="row">
+          <div class="cell">Art S.</div><div class="cell" data-label="Team 1">Colombia</div><div class="cell" data-label="Team 2">Spain</div><div class="cell" data-label="Team 3">Cape Verde</div><div class="cell" data-label="Team 4">Ghana</div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Raymond G.</div><div class="cell">Switzerland</div><div class="cell">Norway</div><div class="cell">Portugal</div><div class="cell">Egypt</div>
+        <div class="row">
+          <div class="cell">Raymond G.</div><div class="cell" data-label="Team 1">Switzerland</div><div class="cell" data-label="Team 2">Norway</div><div class="cell" data-label="Team 3">Portugal</div><div class="cell" data-label="Team 4">Egypt</div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Gino D.</div><div class="cell eliminated">Ivory Coast</div><div class="cell">Mexico</div><div class="cell">Paraguay</div><div class="cell">Bosnia & Herzegovina</div>
+        <div class="row">
+          <div class="cell">Gino D.</div><div class="cell" data-label="Team 1"><span class="value eliminated">Ivory Coast</span></div><div class="cell" data-label="Team 2">Mexico</div><div class="cell" data-label="Team 3">Paraguay</div><div class="cell" data-label="Team 4"><span class="value eliminated">Bosnia & Herzegovina</span></div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">George D.</div><div class="cell eliminated">Germany</div><div class="cell">USA</div><div class="cell">Congo DR</div><div class="cell">Ecuador</div>
+        <div class="row">
+          <div class="cell">George D.</div><div class="cell" data-label="Team 1"><span class="value eliminated">Germany</span></div><div class="cell" data-label="Team 2">USA</div><div class="cell" data-label="Team 3">Congo DR</div><div class="cell" data-label="Team 4"><span class="value eliminated">Ecuador</span></div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Luis D.</div><div class="cell">Croatia</div><div class="cell">Argentina</div><div class="cell">Algeria</div><div class="cell">Australia</div>
+        <div class="row">
+          <div class="cell">Luis D.</div><div class="cell" data-label="Team 1">Croatia</div><div class="cell" data-label="Team 2">Argentina</div><div class="cell" data-label="Team 3">Algeria</div><div class="cell" data-label="Team 4">Australia</div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Eddie D.</div><div class="cell eliminated">Netherlands</div><div class="cell">Morocco</div><div class="cell">Sweden</div><div class="cell">Senegal</div>
+        <div class="row">
+          <div class="cell">Eddie D.</div><div class="cell" data-label="Team 1"><span class="value eliminated">Netherlands</span></div><div class="cell" data-label="Team 2">Morocco</div><div class="cell" data-label="Team 3"><span class="value eliminated">Sweden</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Senegal</span></div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Ray D.</div><div class="cell">France</div><div class="cell">Belgium</div><div class="cell eliminated">Japan</div><div class="cell">Canada</div>
+        <div class="row">
+          <div class="cell">Ray D.</div><div class="cell" data-label="Team 1">France</div><div class="cell" data-label="Team 2">Belgium</div><div class="cell" data-label="Team 3"><span class="value eliminated">Japan</span></div><div class="cell" data-label="Team 4">Canada</div>
         </div>
-        <div class="row" style="display:contents">
-          <div class="cell">Jose M.</div><div class="cell">Brazil</div><div class="cell">England</div><div class="cell">Austria</div><div class="cell eliminated">South Africa</div>
+        <div class="row">
+          <div class="cell">Jose M.</div><div class="cell" data-label="Team 1">Brazil</div><div class="cell" data-label="Team 2">England</div><div class="cell" data-label="Team 3">Austria</div><div class="cell" data-label="Team 4"><span class="value eliminated">South Africa</span></div>
         </div>
 
       </div>
@@ -155,4 +222,3 @@
   </main>
 </body>
 </html>
-
