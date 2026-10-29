@@ -6,171 +6,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
   <title>GinoDiaz.Net</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
+  /* Layout: single centered column, summary strip on top, one row per task with a progress bar beneath */
+  :root {
+    --bg: #f3f5f7;
+    --surface: #ffffff;
+    --fg: #16202a;
+    --muted: #5b6875;
+    --line: #dde2e8;
+    --track: #e6eaee;
+    --accent: #0f766e;
+    --done: #2f7d32;
+    --idle: #9aa5b1;
+    --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1519;
+      --surface: #172027;
+      --fg: #e8edf1;
+      --muted: #93a1ad;
+      --line: #27333c;
+      --track: #26323b;
+      --accent: #2dd4bf;
+      --done: #6fcf74;
+      --idle: #5d6b77;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1519;
+    --surface: #172027;
+    --fg: #e8edf1;
+    --muted: #93a1ad;
+    --line: #27333c;
+    --track: #26323b;
+    --accent: #2dd4bf;
+    --done: #6fcf74;
+    --idle: #5d6b77;
+    color-scheme: dark;
+  }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 40px;
-    display: flex;
-    justify-content: center;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    padding-block: 40px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
   }
+  main { max-width: 680px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+  header { display: flex; flex-direction: column; gap: 4px; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+  .sub { color: var(--muted); margin: 0; font-size: 14px; }
 
-  /* wrapper handles the rounded corners/shadow. On wide screens it
-     can still scroll sideways as a fallback, but on phones we switch
-     the table into a stacked card layout instead (see media query),
-     so scrolling is no longer needed there. */
-  .table-wrapper {
-    width: 100%;
-    max-width: 900px;
-    margin-top: 40px;
-    overflow-x: auto;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  .summary {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 14px;
   }
+  .summary-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .label { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .big { font-family: var(--font-data); font-size: 40px; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; }
+  .counts { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
+  .counts b { font-family: var(--font-data); font-weight: 500; color: var(--fg); font-variant-numeric: tabular-nums; }
 
-  .table {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(110px, 1fr));
-    background: #ffffff;
-    min-width: 600px;
-  }
+  .bar { height: 8px; background: var(--track); border-radius: 4px; overflow: hidden; }
+  .bar > span { display: block; height: 100%; border-radius: 4px; background: var(--accent); }
+  .bar.done > span { background: var(--done); }
+  .bar.idle > span { background: var(--idle); }
+  .bar.big-bar { height: 12px; border-radius: 6px; }
 
-  .cell {
-    padding: 12px 16px;
-    text-align: center;
-    border-bottom: 1px solid #e0e0e0;
-  }
+  ul { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+  li { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
+  li + li { border-top: 1px solid var(--line); }
+  .row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .name { font-weight: 500; min-width: 0; overflow-wrap: anywhere; }
+  .meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .status { font-size: 12px; color: var(--muted); }
+  .pct { font-family: var(--font-data); font-size: 15px; font-weight: 500; min-width: 4ch; text-align: right; font-variant-numeric: tabular-nums; }
+  .done-mark { color: var(--done); }
 
-  .header {
-    background: #2c3e50;
-    color: #ffffff;
-    font-weight: 600;
-  }
+  footer { color: var(--muted); font-size: 12px; }
 
-  .row {
-    display: contents;
-  }
-
-  .row:last-child .cell {
-    border-bottom: none;
-  }
-
-  .row:nth-child(even) .cell:not(.header) {
-    background: #fafafa;
-  }
-
-  .cell:first-child:not(.header) {
-    font-weight: 600;
-    color: #555;
-  }
-
-  /* X overlay: two thin, semi-transparent lines crossed over just
-     the team name text (not the whole cell), via a wrapping span.
-     That way it stays put over the value even when the cell also
-     contains a label, like on mobile. Text stays readable
-     underneath since the lines are thin and not fully opaque. */
-  .value.eliminated {
-    position: relative;
-    display: inline-block;
-  }
-
-  .value.eliminated::before,
-  .value.eliminated::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -6px;
-    right: -6px;
-    height: 2px;
-    background: rgba(220, 53, 69, 0.65);
-    pointer-events: none;
-  }
-
-  .value.eliminated::before {
-    transform: rotate(18deg);
-  }
-
-  .value.eliminated::after {
-    transform: rotate(-18deg);
-  }
-
-  /* ===== MOBILE LAYOUT =====
-     Below 600px the grid is dropped entirely in favor of a stack of
-     "player cards" — one per row — so there's nothing wider than the
-     screen and no horizontal scrolling is ever needed. */
-  @media (max-width: 600px) {
-    body {
-      padding: 16px;
-    }
-
-    .table-wrapper {
-      overflow-x: visible;
-      box-shadow: none;
-      border-radius: 0;
-    }
-
-    .table {
-      display: block;
-      min-width: 0;
-      background: transparent;
-    }
-
-    /* Column headers aren't needed anymore — each value gets its
-       own inline label instead (see .row .cell::before below). */
-    .table > .cell.header {
-      display: none;
-    }
-
-    .row {
-      display: block;
-      background: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      margin-bottom: 12px;
-      overflow: hidden;
-    }
-
-    .row:nth-child(even) .cell:not(.header) {
-      background: transparent;
-    }
-
-    .row .cell {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      text-align: left;
-      padding: 10px 14px;
-      border-bottom: 1px solid #eeeeee;
-      font-size: 14px;
-    }
-
-    .row .cell:last-child {
-      border-bottom: none;
-    }
-
-    /* Player name becomes the card's title/header */
-    .row .cell:first-child {
-      background: #2c3e50 !important;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 15px;
-    }
-
-    /* Team cells get a small label ("Team 1", "Team 2"...) pulled
-       from a data attribute so it's clear what each value means
-       without needing the column headers. */
-    .row .cell[data-label]::before {
-      content: attr(data-label);
-      color: #888888;
-      font-weight: 500;
-      font-size: 12px;
-      flex-shrink: 0;
-    }
-
+  @media (max-width: 440px) {
+    body { padding-block: 24px 40px; }
+    .big { font-size: 34px; }
+    li { padding: 14px 16px; }
+    .row { flex-wrap: wrap; }
   }
 </style>
+
 </head>
 
 <body>
@@ -178,47 +109,67 @@
     <header style="text-align:center;">
       <img src="\img\gbd01.png" width="65" height="65" alt="Mr.Gino"><font size="46" color="green">GinoDiaz</font><font size="48" color="yellow">.</font><font size="46" color="red">Net</font>
     </header>
-    <div class="content" style="text-align:center; margin-top: 20px;">
-      <h1>FIFA World Cup 2026 - Knockout Stage</h1>
-      <p>Players and their selected teams for the Round of 32 in the World Cup 2026.</p>
-    </div>
-
-    <div class="table-wrapper">
-      <div class="table">
-
-        <div class="cell header">Player</div>
-        <div class="cell header">Team 1</div>
-        <div class="cell header">Team 2</div>
-        <div class="cell header">Team 3</div>
-        <div class="cell header">Team 4</div>
-
-              <div class="row">
-          <div class="cell"><b>Art S.</b> </div><div class="cell" data-label="Team 1"><span class="value eliminated">Colombia</span></div><div class="cell" data-label="Team 2"><span class="value"><b>Spain</b></span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Cape Verde</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Ghana</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Raymond G.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Switzerland</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">Norway</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Portugal</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Egypt</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Gino D.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Ivory Coast</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">Mexico</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Paraguay</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Bosnia & Herzegovina</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">George D.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Germany</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">USA</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Congo DR</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Ecuador</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Luis D.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Croatia</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">Argentina</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Algeria</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Australia</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Eddie D.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Netherlands</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">Morocco</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Sweden</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Senegal</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Ray D.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">France</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">Belgium</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Japan</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">Canada</span></div>
-        </div>
-        <div class="row">
-          <div class="cell"><span class="value eliminated">Jose M.</span></div><div class="cell" data-label="Team 1"><span class="value eliminated">Brazil</span></div><div class="cell" data-label="Team 2"><span class="value eliminated">England</span></div><div class="cell" data-label="Team 3"><span class="value eliminated">Austria</span></div><div class="cell" data-label="Team 4"><span class="value eliminated">South Africa</span></div>
-        </div>
-
+  <section class="summary" aria-label="Overall progress">
+    <div class="summary-top">
+      <div>
+        <div class="label">Overall completion</div>
+        <div class="big">52%</div>
+      </div>
+      <div class="counts">
+        <span><b>1</b> done</span>
+        <span><b>4</b> in progress</span>
+        <span><b>1</b> not started</span>
       </div>
     </div>
+    <div class="bar big-bar" role="progressbar" aria-valuenow="52" aria-valuemin="0" aria-valuemax="100" aria-label="Overall completion"><span style="width:52%"></span></div>
+  </section>
+
+  <ul aria-label="Tasks">
+    <li>
+      <div class="row">
+        <span class="name">Write project brief</span>
+        <span class="meta"><span class="status done-mark">Done</span><span class="pct">100%</span></span>
+      </div>
+      <div class="bar done" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" aria-label="Write project brief"><span style="width:100%"></span></div>
+    </li>
+    <li>
+      <div class="row">
+        <span class="name">Design homepage mockups</span>
+        <span class="meta"><span class="status">Nearly there</span><span class="pct">85%</span></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" aria-label="Design homepage mockups"><span style="width:85%"></span></div>
+    </li>
+    <li>
+      <div class="row">
+        <span class="name">Build backend API</span>
+        <span class="meta"><span class="status">In progress</span><span class="pct">60%</span></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Build backend API"><span style="width:60%"></span></div>
+    </li>
+    <li>
+      <div class="row">
+        <span class="name">Set up CI pipeline</span>
+        <span class="meta"><span class="status">In progress</span><span class="pct">45%</span></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" aria-label="Set up CI pipeline"><span style="width:45%"></span></div>
+    </li>
+    <li>
+      <div class="row">
+        <span class="name">Write user documentation</span>
+        <span class="meta"><span class="status">Just started</span><span class="pct">20%</span></span>
+      </div>
+      <div class="bar" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" aria-label="Write user documentation"><span style="width:20%"></span></div>
+    </li>
+    <li>
+      <div class="row">
+        <span class="name">Launch marketing campaign</span>
+        <span class="meta"><span class="status">Not started</span><span class="pct">0%</span></span>
+      </div>
+      <div class="bar idle" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Launch marketing campaign"><span style="width:0%"></span></div>
+    </li>
+  </ul>
+
+  <footer>Sample tasks. Overall completion is the average of all task percentages.</footer>
   </main>
 </body>
 </html>
